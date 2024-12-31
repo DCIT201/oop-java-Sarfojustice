@@ -1,0 +1,212 @@
+Vehicle Rental Management System Documentation
+
+Overview
+
+The Vehicle Rental Management System is a software application designed to manage a fleet of vehicles, customers, and rental transactions. It demonstrates the use of Object-Oriented Programming (OOP) principles, including:
+
+- Abstraction
+- Encapsulation
+- Inheritance
+- Polymorphism
+- Composition
+
+Classes Overview
+
+1. Abstract Class: Vehicle
+
+Purpose:
+The Vehicle class serves as the base class for different types of vehicles. It contains abstract methods for calculating rental costs and checking availability. Specific types of vehicles (e.g., Car, Motorcycle, Truck) will inherit from this class and implement these methods.
+
+Fields:
+
+- `private String vehicleId`: The unique identifier for the vehicle.
+- `private String model`: The model name of the vehicle.
+- `private double baseRentalRate`: The base rate for renting the vehicle.
+- `private boolean isAvailable`: Whether the vehicle is available for rental.
+
+Methods:
+
+    Abstract Methods:
+
+        - `public abstract double calculateRentalCost(int days)`: Calculates the rental cost based on the number of rental days.
+        - `public abstract boolean isAvailableForRental()`: Returns true if the vehicle is available for rental, false otherwise.
+
+Getters and Setters:
+
+  - `public String getVehicleId()`: Returns the vehicle's ID.
+  - `public void setVehicleId(String vehicleId)`: Sets the vehicle's ID.
+  - `public String getModel()`: Returns the vehicle's model.
+  - `public void setModel(String model)`: Sets the vehicle's model.
+  - `public double getBaseRentalRate()`: Returns the base rental rate.
+  - `public void setBaseRentalRate(double baseRentalRate)`: Sets the base rental rate.
+  - `public boolean isAvailable()`: Returns the availability status of the vehicle.
+  - `public void setAvailable(boolean isAvailable)`: Sets the availability of the vehicle.
+
+Constructor:
+
+ - `public Vehicle(String vehicleId, String model, double baseRentalRate, boolean isAvailable)`: Initializes the vehicle with the given ID, model, base rental rate, and availability.
+
+
+2. Concrete Classes: Car, Motorcycle, Truck
+
+Purpose:
+These classes represent specific vehicle types. Each class extends the Vehicle class and provides specific implementations for calculating rental costs and availability.
+
+Car Class:
+public class Car extends Vehicle {
+    private boolean hasAirConditioning;
+
+    public Car(String vehicleId, String model, double baseRentalRate, boolean isAvailable, boolean hasAirConditioning) {
+        super(vehicleId, model, baseRentalRate, isAvailable);
+        this.hasAirConditioning = hasAirConditioning;
+    }
+
+    @Override
+    public double calculateRentalCost(int days) {
+        double additionalCost = hasAirConditioning ? 10.0 : 0.0;
+        return (getBaseRentalRate() + additionalCost) * days;
+    }
+
+    @Override
+    public boolean isAvailableForRental() {
+        return isAvailable();
+    }
+
+    public String toString() {
+        return "Vehicle ID: " + getVehicleId() + ", Model: " + getModel() + ", Base Rate: $" + getBaseRentalRate() +
+                ", Available: " + isAvailable() + ", Air Conditioning: " + (hasAirConditioning ? "Yes" : "No");
+    }
+}
+
+
+Motorcycle Class:
+public class Motorcycle extends Vehicle {
+    private boolean hasHelmet;
+
+    public Motorcycle(String vehicleId, String model, double baseRentalRate, boolean isAvailable, boolean hasHelmet) {
+        super(vehicleId, model, baseRentalRate, isAvailable);
+        this.hasHelmet = hasHelmet;
+    }
+
+    @Override
+    public double calculateRentalCost(int days) {
+        double additionalCost = hasHelmet ? 5.0 : 0.0;
+        return (getBaseRentalRate() + additionalCost) * days;
+    }
+
+    @Override
+    public boolean isAvailableForRental() {
+        return isAvailable();
+    }
+
+    public String toString() {
+        return "Vehicle ID: " + getVehicleId() + ", Model: " + getModel() + ", Base Rate: $" + getBaseRentalRate() +
+                ", Available: " + isAvailable() + ", Helmet: " + (hasHelmet ? "Yes" : "No");
+    }
+}
+
+Truck Class:
+public class Truck extends Vehicle {
+    private double loadCapacity;
+
+    public Truck(String vehicleId, String model, double baseRentalRate, boolean isAvailable, double loadCapacity) {
+        super(vehicleId, model, baseRentalRate, isAvailable);
+        this.loadCapacity = loadCapacity;
+    }
+
+    @Override
+    public double calculateRentalCost(int days) {
+        return getBaseRentalRate() * days + (loadCapacity > 2.0 ? 20.0 : 0.0);
+    }
+
+    @Override
+    public boolean isAvailableForRental() {
+        return isAvailable();
+    }
+
+    public String toString() {
+        return "Vehicle ID: " + getVehicleId() + ", Model: " + getModel() + ", Base Rate: $" + getBaseRentalRate() +
+                ", Available: " + isAvailable() + ", Load Capacity: " + loadCapacity + " tons";
+    }
+}
+
+3. Customer Class
+Purpose:
+The Customer class manages the customer's personal details and rental history. It also checks if the customer is eligible for rental.
+
+Fields:
+- `private String customerId`: The unique identifier for the customer.
+- `private String name`: The name of the customer.
+- `private String contactInfo`: The contact information for the customer.
+- `private List<RentalTransaction> rentalHistory`: A list to track all the rental transactions for the customer.
+
+Methods:
+
+    Constructor:
+
+         - `public Customer(String customerId, String name, String contactInfo)`: Initializes the customer with the given ID, name, and contact info.
+
+    Getters and Setters:
+
+        - `public String getCustomerId()`: Returns the customer ID.
+        - `public String getName()`: Returns the customer's name.
+        - `public String getContactInfo()`: Returns the customer's contact information.
+        - `public List<RentalTransaction> getRentalHistory()`: Returns the customer's rental history.
+
+    Additional Methods:
+
+        - `public void addRentalTransaction(RentalTransaction transaction)`: Adds a rental transaction to the customer’s history.
+        - `public boolean isEligibleForRental()`: Checks if the customer is eligible to rent by ensuring there are no ongoing transactions.
+
+4. RentalTransaction Class
+
+Purpose:
+The RentalTransaction class records each individual rental transaction, including the customer, vehicle, rental dates, and total cost.
+
+Fields:
+- `private String transactionId`: The unique identifier for the transaction.
+- `private Customer customer`: The customer associated with the transaction.
+- `private Vehicle vehicle`: The vehicle rented in the transaction.
+- `private LocalDate rentalDate`: The date the rental starts.
+- `private LocalDate returnDate`: The date the rental ends.
+- `private double totalCost`: The total cost of the rental.
+- `private boolean isCompleted`: The status of the rental (whether it has been completed or not).
+
+Methods:
+
+    Constructor:
+
+        - `public RentalTransaction(String transactionId, Customer customer, Vehicle vehicle, LocalDate rentalDate, int rentalDays)`: Initializes a new rental transaction.
+
+    Methods:
+
+        - `public void completeRental()`: Marks the rental as completed and updates the vehicle status.
+        - `public boolean isCompleted()`: Checks if the rental is completed.
+
+
+5. RentalAgency Class
+
+Purpose:
+The RentalAgency class manages the fleet of vehicles, processes rentals, and generates reports.
+
+Fields:
+- `private String agencyName`: The name of the rental agency.
+- `private List<Vehicle> fleet`: The list of vehicles available for rent.
+- `private List<RentalTransaction> transactions`: The list of rental transactions.
+
+Methods:
+
+    Constructor:
+        - `public RentalAgency(String agencyName)`: Initializes the rental agency with the given name.
+
+    Methods:
+        - `public void addVehicle(Vehicle vehicle)`: Adds a vehicle to the fleet.
+        - `public List<Vehicle> listAvailableVehicles()`: Returns a list of available vehicles.
+        - `public RentalTransaction rentVehicle(String transactionId, Customer customer, String vehicleId, int rentalDays)`: Rents a vehicle to a customer.
+        - `public void returnVehicle(String transactionId)`: Returns a vehicle that has been rented.
+
+6. Main Class
+
+Purpose:
+The Main class is used for testing the system. It demonstrates the creation of vehicles, customers, rental transactions, and renting/returning vehicles.
+
